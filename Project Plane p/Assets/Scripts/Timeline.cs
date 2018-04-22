@@ -9,6 +9,8 @@ public class Timeline : MonoBehaviour {
 
 	bool playing;
 
+	float playSpeedMultiplier = 1f;
+
 	public Sprite pause;
 	public Sprite play;
 	public Image button;
@@ -18,7 +20,7 @@ public class Timeline : MonoBehaviour {
 		anim["Main"].speed = 0;
 	}
 	public void Update(){
-		if(anim["Main"].speed == 1){
+		if(anim["Main"].speed != 0){
 			slider.value = anim["Main"].normalizedTime;
 		}
 		else{
@@ -32,15 +34,17 @@ public class Timeline : MonoBehaviour {
 			CustomTimer.instance.ResetTimer();
 		}
 	}
+	//Toggles between pauze and play
 	public void Play(){
 		if(playing){
-			anim["Main"].speed = 0;
+			anim["Main"].speed = 0f;
 			playing = false;
 			button.sprite = play;
 			CustomTimer.instance.ProgressTime();
 		}
 		else{
-			anim["Main"].speed = 1;
+			anim["Main"].speed = 1f * playSpeedMultiplier;
+			Debug.Log(anim["Main"].speed);
 			playing = true;
 			button.sprite = pause;
 			CustomTimer.instance.ProgressTime();			
@@ -48,10 +52,17 @@ public class Timeline : MonoBehaviour {
 	}
 	public void Pauze(){
 		if(playing){
-			anim["Main"].speed = 0;
+			anim["Main"].speed = 0f;
 			playing = false;
 			button.sprite = play;
 			CustomTimer.instance.ProgressTime();			
 		}	
+	}
+	public void ChangeSpeed(float s){
+		Debug.Log("Speed is : " + s);
+		playSpeedMultiplier = s;
+		if(playing){
+			anim["Main"].speed = 1f * playSpeedMultiplier;
+		}
 	}
 }
